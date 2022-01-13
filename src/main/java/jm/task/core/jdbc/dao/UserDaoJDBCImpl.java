@@ -53,7 +53,8 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public List<User> getAllUsers() {
+   public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
         try {
             assert connection != null;
             Statement statement = connection.createStatement();
@@ -63,13 +64,11 @@ public class UserDaoJDBCImpl implements UserDao {
                 String name = resultSet.getString("name");
                 String lastName = resultSet.getString("lastName");
                 byte age = resultSet.getByte("age");
-                List<User> userList = new ArrayList<>();
-                return userList;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return userList;
     }
 
 
