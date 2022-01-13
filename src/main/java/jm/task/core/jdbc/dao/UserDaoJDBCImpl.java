@@ -32,20 +32,22 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try {
-            Statement statement = connection.createStatement();
-            statement.execute("INSERTE INTO(name, lastName, age) User VALUES(?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO `User` (`name`, `lastName`, `age`) VALUES(?,?,?)");
+            statement.setString(1, name);
+            statement.setString(2, lastName);
+            statement.setInt(3, age);
+            statement.executeUpdate();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
-    public void removeUserById(long id) {
+   public void removeUserById(long id) {
         try {
             assert connection != null;
-            Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM User WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM User WHERE id = ?");
+            statement.setInt(1, (int) id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,13 +63,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 String name = resultSet.getString("name");
                 String lastName = resultSet.getString("lastName");
                 byte age = resultSet.getByte("age");
-                List<User> userList = new ArrayList<User>((Collection<? extends User>) resultSet);
+                List<User> userList = new ArrayList<>();
                 return userList;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -75,7 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try {
             Statement statement = connection.createStatement();
-            statement.execute("DELETE FROM User");
+            statement.execute("TRUNCATE User");
         } catch (SQLException e) {
             e.printStackTrace();
         }
