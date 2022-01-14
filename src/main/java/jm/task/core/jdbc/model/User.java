@@ -24,7 +24,10 @@ public class User {
         this.lastName = lastName;
         this.age = age;
     }
+    
+    public User(){
 
+    }
 
     public Long getId() {
         return id;
